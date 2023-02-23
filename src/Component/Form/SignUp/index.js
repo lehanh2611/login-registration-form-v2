@@ -6,7 +6,7 @@ import Password from "../Component/Password";
 import validateHandle from "../functions/validateHandle";
 import Notification from "~/Component/Notification";
 
-function SignIn({ cN, submitHandle, accounts, setAccounts }) {
+function SignUp({ cN, submitHandle, accounts, setAccounts }) {
   const [options, setOptions] = useState({});
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -36,7 +36,7 @@ function SignIn({ cN, submitHandle, accounts, setAccounts }) {
     });
   }, []);
 
-  //Sign in handle
+  //Sign up handle
   useEffect(() => {
     submitHandle.current = () => {
       const data = validateHandle(Object.values(options), firstRun);
@@ -92,4 +92,4 @@ function SignIn({ cN, submitHandle, accounts, setAccounts }) {
   );
 }
 
-export default SignIn;
+export default SignUp;

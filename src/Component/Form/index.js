@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 
 import styles from "./.module.scss";
 import LogIn from "./LogIn";
-import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import Button from "./Component/Component/Button";
 
 const cN = classNames.bind(styles);
@@ -48,7 +48,7 @@ function Form() {
         {style ? (
           <LogIn cN={cN} submitHandle={submitHandle} accounts={accounts} />
         ) : (
-          <SignIn
+          <SignUp
             cN={cN}
             submitHandle={submitHandle}
             accounts={accounts}
