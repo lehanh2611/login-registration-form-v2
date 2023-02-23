@@ -1,1 +1,1 @@
-[Run App](/build/index.html)
+[Run App =>>>](build/index.html)
