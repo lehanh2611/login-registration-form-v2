@@ -1,1 +1,1 @@
-[Run App =>>>](build/index.html)
+[Run App](/login-registration-form-v2/build/index.html)
