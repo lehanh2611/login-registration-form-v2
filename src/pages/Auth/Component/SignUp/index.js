@@ -2,23 +2,26 @@ import React, { useState, useReducer } from "react";
 
 import InputForm from "../Component/InputForm";
 import EmailIcon from "~/assets/svg/EmailIcon";
-import LockIcon from "~/assets/svg/LockIcon";
 import EyeIcon from "~/assets/svg/EyeIcon";
 import EyeSlashIcon from "~/assets/svg/EyeSlashIcon";
-import Button from "../Component/Component/Button";
-import { initialOptions } from "../helper/initialOptions";
-import reducerOptions from "../helper/reducerOptions";
-import validateHandle from "../helper/validateHandle";
+import LockIcon from "~/assets/svg/LockIcon";
+import UserIcon from "~/assets/svg/UserIcon";
+import Button from "~/Component/Button";
+import { initialOptions } from "../../helper/initialOptions";
+import reducerOptions from "../../helper/reducerOptions";
+import validateHandle from "../../helper/validateHandle";
+import CreateID from "~/helper/CreateID";
 import Notification from "~/Component/Notification";
 
-function LogIn({ cN, accounts }) {
-  const { email, password } = initialOptions;
+function SignUp({ cN, accounts, setAccounts }) {
+  const { email, fullName, password } = initialOptions;
   const [options, dispacthOptions] = useReducer(reducerOptions, {
     email,
+    fullName,
     password,
   });
-  const [showPassword, setShowPassword] = useState(true);
   const [onValidate, setOnValidate] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const [{ notiState, notiContent, countDown, unMount }, setNoti] = useState(
     {}
   );
@@ -43,24 +46,34 @@ function LogIn({ cN, accounts }) {
       return;
     }
 
-    const result = accounts.find(
-      (account) =>
-        account.email === data.email && account.password === data.password
-    );
-
-    if (result) {
-      setNoti({
-        notiState: true,
-        notiContent: "Đăng nhập thành công",
-        countDown: 3000,
-      });
-    } else {
+    if (accounts.some((account) => account.email === data.email)) {
       setNoti({
         notiState: false,
-        notiContent: "Tài khoản không chính xác",
+        notiContent: "Tài khoản đã tồn tại",
         countDown: 3000,
       });
+      return;
     }
+
+    function User(email, fullName, password) {
+      this.id = CreateID();
+      this.email = email;
+      this.fullName = fullName;
+      this.password = password;
+    }
+
+    const newUser = new User(data.email, data.fullName, data.password);
+
+    setAccounts((preAccounts) => {
+      const newAccounts = [...preAccounts, newUser];
+      localStorage.setItem("Accounts", JSON.stringify(newAccounts));
+      return newAccounts;
+    });
+    setNoti({
+      notiState: true,
+      notiContent: "Đăng ký thành công",
+      countDown: 3000,
+    });
   }
 
   return (
@@ -73,6 +86,15 @@ function LogIn({ cN, accounts }) {
         placeholder="Email"
       >
         <EmailIcon className={cN("icon")} />
+      </InputForm>
+      <InputForm
+        cN={cN}
+        onValidate={onValidate}
+        option={options.fullName}
+        dispatch={dispacthOptions}
+        placeholder="Fullname"
+      >
+        <UserIcon className={cN("icon")} />
       </InputForm>
       <InputForm
         cN={cN}
@@ -96,8 +118,7 @@ function LogIn({ cN, accounts }) {
         <LockIcon className={cN("icon")} />
       </InputForm>
       <span>
-        <Button className={cN("button")} text="LOG IN" />
-        <p>Forgot password?</p>
+        <Button className={cN("button")} text="SIGN IN" />
       </span>
       {unMount || (
         <Notification
@@ -111,4 +132,4 @@ function LogIn({ cN, accounts }) {
   );
 }
 
-export default LogIn;
+export default SignUp;

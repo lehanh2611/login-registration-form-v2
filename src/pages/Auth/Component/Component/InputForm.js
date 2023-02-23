@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import Input from "./Component/Input";
-import validateHandle from "../helper/validateHandle";
+import Input from "~/Component/Input";
+import validateHandle from "../../helper/validateHandle";
 
 function InputForm({
   cN,

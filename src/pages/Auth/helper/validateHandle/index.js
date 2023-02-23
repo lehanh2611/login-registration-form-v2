@@ -1,15 +1,12 @@
 import validate from "../validate";
 
-function validateHandle(
-  {
-    options,
-    action,
-    dispatch,
-    onValidate,
-    setOnValidate,
-  }
-) {
-
+function validateHandle({
+  options,
+  action,
+  dispatch,
+  onValidate,
+  setOnValidate,
+}) {
   if (!action) {
     if (!onValidate) {
       setOnValidate(true);
