@@ -1,0 +1,28 @@
+.inputBox {
+  position: relative;
+  width: 100%;
+  margin: 6px 0;
+  input {
+    width: 100%;
+  }
+}
+
+.icon {
+  position: absolute;
+  right: 0;
+  width: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  fill: var(--gray);
+}
+
+.message {
+  position: absolute;
+  bottom: -10px;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.error {
+  border-color: var(--primary) !important;
+}

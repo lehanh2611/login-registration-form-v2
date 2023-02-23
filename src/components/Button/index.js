@@ -3,10 +3,10 @@ import styles from "./.module.scss";
 
 const cN = classNames.bind(styles);
 
-function Button({ className, text, onClick }) {
+function Button({ className, children, ...props }) {
   return (
-    <button className={cN("button", className)} onClick={onClick}>
-      {text}
+    <button className={cN("button", className)} {...props}>
+      {children}
     </button>
   );
 }

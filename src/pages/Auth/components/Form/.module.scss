@@ -1,0 +1,172 @@
+@media (max-width: 1199px) {
+  .form {
+    --space: 4vw;
+  }
+}
+@media (min-width: 1200px) {
+  .form {
+    --space: 3.6vw;
+  }
+}
+
+.form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  border-radius: 4px;
+  width: 90vw;
+  height: 450px;
+  max-width: 1100px;
+  background-color: hsl(7deg 5% 9% / 85%);
+  box-shadow: 0 0 2px #1e1d1da0;
+
+  .sub {
+    position: absolute;
+    width: 35%;
+
+    .title {
+      font-size: 3.2rem;
+      font-weight: 100;
+      padding: 10px 0;
+    }
+    .content {
+      font-weight: 300;
+      font-size: 1.8rem;
+    }
+    .button {
+      margin-top: 40px;
+      // width: 168px;
+      // border-color: var(--primary);
+      // background-color: var(--primary);
+    }
+  }
+
+  .cushion {
+    position: absolute;
+    background-color: #ffffff;
+    width: calc(60% - var(--space) * 2);
+    top: -10%;
+    color: #000000;
+    bottom: -10%;
+    right: 70px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px #696969;
+    padding: 80px 56px;
+
+    .title {
+      font-weight: 400;
+      color: #e7634b;
+      font-size: 32px;
+      margin-bottom: 56px;
+    }
+  }
+}
+
+.form[state="SIGN IN"] .cushion {
+  animation: cushionToRight linear 0.6s forwards;
+}
+
+.form[state="SIGN UP"] .cushion {
+  animation: cushionToLeft linear 0.6s forwards;
+}
+
+.form[state="SIGN IN"] .sub {
+  left: 50px;
+  right: auto;
+  animation: formToLeft linear 0.6s forwards;
+}
+
+.form[state="SIGN UP"] .sub {
+  left: auto;
+  right: 50px;
+  animation: formToRight linear 0.6s forwards;
+}
+
+@keyframes cushionToLeft {
+  0% {
+    left: calc(100% - var(--space));
+    transform: translateX(-100%);
+  }
+  40% {
+    left: 0vw;
+    transform: translateX(0%);
+  }
+  60% {
+    left: var(--space);
+  }
+  80% {
+    left: calc(var(--space) + 0.5vw);
+  }
+  100% {
+    left: var(--space);
+    transform: translateX(0%);
+  }
+}
+
+@keyframes cushionToRight {
+  0% {
+    left: var(--space);
+    transform: translateX(0%);
+  }
+  40% {
+    left: calc(100% - 0vw);
+    transform: translateX(-100%);
+  }
+  60% {
+    left: calc(100% - var(--space));
+  }
+  80% {
+    left: calc(100% - var(--space) - 0.5vw);
+  }
+  100% {
+    left: calc(100% - var(--space));
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes formToLeft {
+  0% {
+    left: 100px;
+    opacity: 0;
+  }
+  40% {
+    left: 80px;
+    opacity: 0.4;
+  }
+  60% {
+    left: 70px;
+    opacity: 0.6;
+  }
+  80% {
+    left: 60px;
+    opacity: 0.8;
+  }
+  100% {
+    left: 50px;
+    opacity: 1;
+  }
+}
+
+@keyframes formToRight {
+  0% {
+    right: 100px;
+    opacity: 0;
+  }
+  40% {
+    right: 80px;
+    opacity: 0.4;
+  }
+  60% {
+    right: 70px;
+    opacity: 0.6;
+  }
+  80% {
+    right: 60px;
+    opacity: 0.8;
+  }
+  100% {
+    right: 50px;
+    opacity: 1;
+  }
+}

@@ -26,7 +26,7 @@ const MAX_LENGTH = "maxLength";
 const MAX_LENGTH_RULE = 30;
 const MAX_LENGTH_MESSAGE = `Trường này tối đa là ${MAX_LENGTH_RULE} ký tự`;
 
-function validate(type, rules, value) {
+export function validate(type, rules, value) {
   const output = { type: type, message: "" };
 
   if (value === "") {
@@ -64,9 +64,60 @@ function validate(type, rules, value) {
         }
         break;
       }
+      default:
+        break;
     }
   }
   return output;
 }
 
-export default validate;
+export function validateHandle(options, firstRun) {
+  let output;
+
+  // Check error
+  if (
+    options.some((option) => {
+      return option.ref.message.innerText !== "";
+    })
+  ) {
+    return;
+  }
+
+  function handle(option) {
+    const ref = option.ref;
+    const input = ref.input;
+    const message = ref.message;
+    const result = validate(option.type, option.rules, input.value);
+
+    message.innerText = result.message;
+    if (result.message === "") {
+      input.style.borderColor = "var(--gray)";
+      const value = input.value.toString().trim();
+      return {
+        [option.type]: option.type === "email" ? value.toLowerCase() : value,
+      };
+    } else {
+      input.style.borderColor = "var(--primary)";
+    }
+  }
+
+  // Validate all
+  output = options.reduce((acc, option) => {
+    return { ...acc, ...handle(option) };
+  }, {});
+
+  // Add event handle
+  if (firstRun.current) {
+    firstRun.current = false;
+
+    for (const option of options) {
+      option.ref.input.oninput = () => {
+        output = handle(option);
+      };
+    }
+  }
+
+  if (Object.values(output).length === options.length) {
+    return output;
+  }
+}

@@ -1,11 +1,9 @@
-import Background from "./Component/Background";
-import Form from "./Component/Form";
+import Routes from "./routes";
 
 function App() {
   return (
     <div className="App">
-      <Background />
-      <Form />
+      <Routes />
     </div>
   );
 }
