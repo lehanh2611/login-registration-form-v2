@@ -40,29 +40,36 @@ function validate(type, rules, value) {
       break;
     }
     switch (rule) {
-      case EMAIL: {
-        if (!EMAIL_RULE.test(value)) {
-          output.message = EMAIL_MESSAGE;
+      case EMAIL:
+        {
+          if (!EMAIL_RULE.test(value)) {
+            output.message = EMAIL_MESSAGE;
+          }
         }
         break;
-      }
-      case PASSWORD: {
-        if (!PASSWORD_RULE.test(value)) {
-          output.message = PASSWORD_MESSAGE;
+      case PASSWORD:
+        {
+          if (!PASSWORD_RULE.test(value)) {
+            output.message = PASSWORD_MESSAGE;
+          }
         }
         break;
-      }
-      case MIN_LENGTH: {
-        if (!(value.length >= MIN_LENGTH_RULE)) {
-          output.message = MIN_LENGTH_MESSAGE;
+      case MIN_LENGTH:
+        {
+          if (!(value.length >= MIN_LENGTH_RULE)) {
+            output.message = MIN_LENGTH_MESSAGE;
+          }
         }
         break;
-      }
-      case MAX_LENGTH: {
-        if (!(value.length <= MAX_LENGTH_RULE)) {
-          output.message = MAX_LENGTH_MESSAGE;
+      case MAX_LENGTH:
+        {
+          if (!(value.length <= MAX_LENGTH_RULE)) {
+            output.message = MAX_LENGTH_MESSAGE;
+          }
         }
         break;
+      default: {
+        throw new Error("Invalid case");
       }
     }
   }

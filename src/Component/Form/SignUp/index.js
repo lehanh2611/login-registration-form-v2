@@ -1,85 +1,124 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useReducer } from "react";
 
-import Email from "../Component/Email";
-import FullName from "../Component/FullName";
-import Password from "../Component/Password";
-import validateHandle from "../functions/validateHandle";
+import InputForm from "../Component/InputForm";
+import EmailIcon from "~/assets/svg/EmailIcon";
+import EyeIcon from "~/assets/svg/EyeIcon";
+import EyeSlashIcon from "~/assets/svg/EyeSlashIcon";
+import LockIcon from "~/assets/svg/LockIcon";
+import UserIcon from "~/assets/svg/UserIcon";
+import Button from "../Component/Component/Button";
+import { initialOptions } from "../helper/initialOptions";
+import reducerOptions from "../helper/reducerOptions";
+import validateHandle from "../helper/validateHandle";
 import Notification from "~/Component/Notification";
 
-function SignUp({ cN, submitHandle, accounts, setAccounts }) {
-  const [options, setOptions] = useState({});
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const fullnameRef = useRef();
-  const firstRun = useRef(true);
+function SignUp({ cN, accounts, setAccounts }) {
+  const { email, fullName, password } = initialOptions;
+  const [options, dispacthOptions] = useReducer(reducerOptions, {
+    email,
+    fullName,
+    password,
+  });
+  const [onValidate, setOnValidate] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const [{ notiState, notiContent, countDown, unMount }, setNoti] = useState(
     {}
   );
 
-  useEffect(() => {
-    setOptions({
-      email: {
-        type: "email",
-        ref: emailRef.current,
-        rules: ["email"],
-      },
-      fullname: {
-        type: "fullName",
-        ref: fullnameRef.current,
-        rules: ["minLength", "maxLength"],
-      },
-      password: {
-        type: "password",
-        ref: passwordRef.current,
-        rules: ["password"],
-      },
+  //Submit form
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    //Check error
+    if (Object.values(options).some((option) => option?.message)) {
+      return;
+    }
+
+    const data = validateHandle({
+      options,
+      dispatch: dispacthOptions,
+      onValidate,
+      setOnValidate,
     });
-  }, []);
 
-  //Sign up handle
-  useEffect(() => {
-    submitHandle.current = () => {
-      const data = validateHandle(Object.values(options), firstRun);
+    if (!data || Object.values(data).length !== Object.values(options).length) {
+      return;
+    }
 
-      if (!data) {
-        return;
-      }
-
-      if (accounts.some((account) => account.email === data.email)) {
-        setNoti({
-          notiState: false,
-          notiContent: "Tài khoản đã tồn tại",
-          countDown: 5000,
-        });
-        return;
-      }
-
-      function User(email, fullName, password) {
-        this.id = accounts.length;
-        this.email = email;
-        this.fullName = fullName;
-        this.password = password;
-      }
-
-      const newUser = new User(data.email, data.fullName, data.password);
-
-      setAccounts((preAccounts) => {
-        const newAccounts = [...preAccounts, newUser];
-        localStorage.setItem("Accounts", JSON.stringify(newAccounts));
-        return newAccounts;
-      });
+    if (accounts.some((account) => account.email === data.email)) {
       setNoti({
-        notiState: true,
-        notiContent: "Đăng ký thành công",
-        countDown: 5000,
+        notiState: false,
+        notiContent: "Tài khoản đã tồn tại",
+        countDown: 3000,
       });
-    };
-  });
+      return;
+    }
+
+    function User(email, fullName, password) {
+      this.id = accounts.length;
+      this.email = email;
+      this.fullName = fullName;
+      this.password = password;
+    }
+
+    const newUser = new User(data.email, data.fullName, data.password);
+
+    setAccounts((preAccounts) => {
+      const newAccounts = [...preAccounts, newUser];
+      localStorage.setItem("Accounts", JSON.stringify(newAccounts));
+      return newAccounts;
+    });
+    setNoti({
+      notiState: true,
+      notiContent: "Đăng ký thành công",
+      countDown: 3000,
+    });
+  }
+
   return (
-    <>
-      <Email reference={emailRef} cN={cN} />
-      <FullName reference={fullnameRef} cN={cN} />
-      <Password reference={passwordRef} cN={cN} />
+    <form className={cN("mainForm")} onSubmit={handleSubmit}>
+      <InputForm
+        cN={cN}
+        onValidate={onValidate}
+        option={options.email}
+        dispatch={dispacthOptions}
+        placeholder="Email"
+      >
+        <EmailIcon className={cN("icon")} />
+      </InputForm>
+      <InputForm
+        cN={cN}
+        onValidate={onValidate}
+        option={options.fullName}
+        dispatch={dispacthOptions}
+        placeholder="Fullname"
+      >
+        <UserIcon className={cN("icon")} />
+      </InputForm>
+      <InputForm
+        cN={cN}
+        onValidate={onValidate}
+        option={options.password}
+        dispatch={dispacthOptions}
+        placeholder="Password"
+        type={showPassword ? "password" : "text"}
+      >
+        <span
+          onClick={() => {
+            setShowPassword((pre) => !pre);
+          }}
+        >
+          {showPassword ? (
+            <EyeSlashIcon className={cN("icon", "passwordIcon")} />
+          ) : (
+            <EyeIcon className={cN("icon", "passwordIcon")} />
+          )}
+        </span>
+        <LockIcon className={cN("icon")} />
+      </InputForm>
+      <span>
+        <Button className={cN("button")} text="SIGN IN" />
+      </span>
       {unMount || (
         <Notification
           state={notiState}
@@ -88,7 +127,7 @@ function SignUp({ cN, submitHandle, accounts, setAccounts }) {
           setNoti={setNoti}
         />
       )}
-    </>
+    </form>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import classNames from "classnames/bind";
 
 import styles from "./.module.scss";
@@ -14,20 +14,17 @@ const content =
 
 function Form() {
   const [style, setstyle] = useState(false); // true = LOG IN
-  const submitHandle = useRef();
   const formRef = useRef();
   const [accounts, setAccounts] = useState(
     JSON.parse(localStorage.getItem("Accounts")) ?? []
   );
 
   //Set window title
-  document.querySelector("head title").innerText = style ? "Log in" : "Sign up";
-
-  //Start validate
-  function submit(event) {
-    event.preventDefault();
-    submitHandle.current();
-  }
+  useEffect(() => {
+    document.querySelector("head title").innerText = style
+      ? "Log in"
+      : "Sign up";
+  }, [style]);
 
   function styleHandle() {
     const form = formRef.current;
@@ -43,26 +40,14 @@ function Form() {
 
   return (
     <div className={cN("form")} state={style ? "LOG IN" : "SIGN UP"}>
-      <form ref={formRef} className={cN("body")} onSubmit={submit}>
+      <div ref={formRef} className={cN("body")}>
         <h3 className={cN("title")}>{style ? "LOG IN" : "SIGN UP"}</h3>
         {style ? (
-          <LogIn cN={cN} submitHandle={submitHandle} accounts={accounts} />
+          <LogIn cN={cN} accounts={accounts} />
         ) : (
-          <SignUp
-            cN={cN}
-            submitHandle={submitHandle}
-            accounts={accounts}
-            setAccounts={setAccounts}
-          />
+          <SignUp cN={cN} accounts={accounts} setAccounts={setAccounts} />
         )}
-        <span>
-          <Button
-            className={cN("button")}
-            text={style ? "LOG IN" : "SIGN UP"}
-          />
-          {style && <p>Forgot password?</p>}
-        </span>
-      </form>
+      </div>
       <div className={cN("sub")}>
         <h3 className={cN("title")}>
           {style ? titleSignUpSub : titleLoginSub}
