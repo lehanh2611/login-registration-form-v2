@@ -1,0 +1,42 @@
+.notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 0 10px;
+  padding-bottom: 3px;
+  color: #ffffff;
+  font-size: 1.8rem;
+  min-width: 238px;
+  height: 40px;
+  border-radius: 3px;
+  box-shadow: 0 0 3px #1e1d1da0;
+  animation: show ease 0.3s forwards;
+
+  svg {
+    fill: #ffffff;
+    width: 13px;
+    margin-left: 10px;
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.notification[state="success"] {
+  background-color: var(--blue);
+}
+
+.notification[state="error"] {
+  background-color: var(--primary);
+}

@@ -1,0 +1,12 @@
+.background {
+  position: fixed;
+  z-index: -99999;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(1px);
+  background-image: url(../../assets/img/background.jpg);
+}
